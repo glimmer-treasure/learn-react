@@ -11,8 +11,8 @@ export class FormStore {
     getFormValue = (name) => {
         return this.store[name] ?? null
     }
-    setFormVale = ({name = '', value = ''}) => {
-        const partailStore =  name ? {name, value} : {}
+    setFormValue = ({name = '', value = ''}) => {
+        const partailStore =  name ? {[name]: value} : {}
         this.store = {
             ...this.store,
             ...partailStore
@@ -26,10 +26,10 @@ export class FormStore {
     }
     noticeUpdate = (name) => this.nameToSubscriber.get(name)?.()
     getStore = () => ({
-        getFormValues,
-        getFormValue,
-        setFormVale,
-        subscribe,
+        getFormValues: this.getFormValues,
+        getFormValue: this.getFormValue,
+        setFormValue: this.setFormValue,
+        subscribe: this.subscribe,
     })
 }
 
