@@ -1,0 +1,16 @@
+.redux__container {
+    display: flex;
+    flex-direction: column;
+}
+.redux__input {
+    height: 34px;
+    width: 220px;
+    margin: 8px;
+    box-sizing: border-box;
+    padding: 4px;
+}
+.redux__btn--add-btn {
+    width: 60px;
+    height: 34px;
+    margin: 8px;
+}
