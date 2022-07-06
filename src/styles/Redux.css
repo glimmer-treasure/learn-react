@@ -9,8 +9,14 @@
     box-sizing: border-box;
     padding: 4px;
 }
+.redux__btn {
+    display: inline-flex;
+    padding: 8px;
+    color: white;
+    justify-content: center;
+    align-items: center;
+}
 .redux__btn--add-btn {
-    width: 60px;
-    height: 34px;
-    margin: 8px;
+    flex: 0 0 auto;
+    background-color: red;
 }
