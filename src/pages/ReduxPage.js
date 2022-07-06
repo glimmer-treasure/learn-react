@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
-import { applyMiddleware,createStore } from 'redux'
+// import { applyMiddleware,createStore } from 'redux'
+import { createStore, applyMiddleware } from '../components/Redux'
 import logger from 'redux-logger'
 import thunk from 'redux-thunk'
-// import { createStore } from '../components/Redux'
 import '../styles/Redux.css'
 
 const reducer = (state={value: 0}, action) => {
