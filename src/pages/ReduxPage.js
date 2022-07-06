@@ -36,8 +36,10 @@ const FormPage = (props) => {
     return (
         <div className="redux__container">
             <input className="redux__input" value={state.value} />
-            <button className="redux__btn redux__btn--add-btn" size='large' onClick={increase}>同步加</button>
-            <button className="redux__btn redux__btn--add-btn" onClick={asyncIncrease}>异步加</button>
+            <div>
+                <button className="redux__btn redux__btn--add-btn" onClick={increase}>同步加</button>
+                <button className="redux__btn redux__btn--add-btn" onClick={asyncIncrease}>异步加</button>
+            </div>
         </div>
     )
 }
