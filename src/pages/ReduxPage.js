@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 // import { applyMiddleware,createStore } from 'redux'
 import { createStore, applyMiddleware } from '../components/Redux'
-import logger from 'redux-logger'
-import thunk from 'redux-thunk'
+// import logger from 'redux-logger'
+// import thunk from 'redux-thunk'
 import '../styles/Redux.css'
 
 const reducer = (state={value: 0}, action) => {
@@ -11,6 +11,26 @@ const reducer = (state={value: 0}, action) => {
             return {...state, value: state.value + 1}
         default:
             return { ...state }
+    }
+}
+
+const logger = ({getState, dispatch}) => {
+    return (next) => (action) => {
+        console.log('以前的state:')
+        console.log(getState())
+        next(action)
+        console.log('当前的state:')
+        console.log(getState())
+    }
+}
+
+const thunk = ({getState, dispatch}) => {
+    return (next) => (action) => {
+        if (typeof action === 'function') {
+            action(next, getState)
+        } else {
+            next(action)
+        }
     }
 }
 
