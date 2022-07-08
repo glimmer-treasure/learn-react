@@ -56,3 +56,19 @@ export const applyMiddleware = (...middlewares) => {
     }
 }
 
+export const combineReducers = (reducerMap) => {
+    return (state = {}, action) => {
+        let shouldUpdate = false
+        const nextState = Object.entries(reducerMap).reduce((nextState, cur) => {
+            const [name, reducer] = cur
+            const partialState = state[name]
+            const nextPartialState = reducer(partialState, action)
+            shouldUpdate = shouldUpdate || (nextPartialState !== partialState)
+            nextState[name] = nextPartialState
+            return nextState
+        }, {})
+        shouldUpdate = shouldUpdate || (Object.keys(nextState).length !== Object.keys(state).length)
+        return shouldUpdate ? nextState : state
+    }
+}
+
