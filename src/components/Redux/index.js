@@ -40,16 +40,16 @@ export const createStore = (reducer, enhancer) => {
 export const applyMiddleware = (...middlewares) => {
     return (createStore) => {
         return (reducer) => {
-            const { getState, dispatch, subscribe } = createStore(reducer)
+            let { getState, dispatch, subscribe } = createStore(reducer)
             const midApi = {
                 getState,
                 dispatch: (action, ...args) => dispatch(action, ...args)
             }
             const middlewareChain = middlewares.map((middleware) => middleware(midApi))
-            const enhancedDispatch = compose(...middlewareChain)(dispatch)
+            dispatch = compose(...middlewareChain)(dispatch)
             return {
                 getState,
-                dispatch: enhancedDispatch,
+                dispatch,
                 subscribe,
             }
         }

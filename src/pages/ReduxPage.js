@@ -8,7 +8,7 @@ import '../styles/Redux.css'
 const reducer = (state={value: 0}, action) => {
     switch(action.type) {
         case 'increase':
-            return {...state, value: state.value + 1}
+            return {...state, value: state.value + (action.payload ?? 1)}
         default:
             return { ...state }
     }
@@ -27,14 +27,24 @@ const logger = ({getState, dispatch}) => {
 const thunk = ({getState, dispatch}) => {
     return (next) => (action) => {
         if (typeof action === 'function') {
-            action(next, getState)
+            action(dispatch, getState)
         } else {
             next(action)
         }
     }
 }
 
-const store = createStore(reducer, applyMiddleware(thunk, logger))
+const promise = ({getState, dispatch}) => {
+    return (next) => (action) => {
+        if (action instanceof Promise) {
+            action.then((actualAction) => dispatch(actualAction))
+        } else {
+            next(action)
+        }
+    }
+}
+
+const store = createStore(reducer, applyMiddleware(thunk, promise, logger))
 
 const FormPage = (props) => {
     const state = store.getState()
@@ -46,9 +56,15 @@ const FormPage = (props) => {
         store.dispatch((dispatch, getState) => {
             const state = getState()
             setTimeout(() => {
-                dispatch({type: 'increase', payload: state.value + 3})
+                dispatch({type: 'increase', payload: 3})
             }, 3000);
         })
+    })
+    const promiseIncrease = useCallback(() => {
+        let promise = new Promise((resolve) => {
+            setTimeout(() => resolve({type: 'increase', payload: 3}), 3000)
+        })
+        store.dispatch(promise)
     })
     useEffect(() => {
         return store.subscribe(() => forceUpdate(+new Date))
@@ -59,6 +75,7 @@ const FormPage = (props) => {
             <div>
                 <button className="redux__btn redux__btn--add-btn" onClick={increase}>同步加</button>
                 <button className="redux__btn redux__btn--add-btn" onClick={asyncIncrease}>异步加</button>
+                <button className="redux__btn redux__btn--add-btn" onClick={promiseIncrease}>Promise加</button>
             </div>
         </div>
     )
