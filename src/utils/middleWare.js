@@ -1,12 +1,3 @@
-export const reducer = (state={value: 0}, action) => {
-    switch(action.type) {
-        case 'increase':
-            return {...state, value: state.value + (action.payload ?? 1)}
-        default:
-            return { ...state }
-    }
-}
-
 export const logger = ({getState, dispatch}) => {
     return (next) => (action) => {
         console.log('以前的state:')

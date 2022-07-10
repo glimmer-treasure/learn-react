@@ -72,3 +72,12 @@ export const combineReducers = (reducerMap) => {
     }
 }
 
+const bindActionCreator = (creator, dispatch) => compose(dispatch, creator)
+
+export const bindActionCreators = (creators, dispatch) => {
+    return Object.entries(creators).reduce((mapDispatchToProps, cur) => {
+        const [name, creator] = cur 
+        mapDispatchToProps[name] = bindActionCreator(creator, dispatch)
+        return mapDispatchToProps
+    }, {})
+}
