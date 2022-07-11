@@ -11,6 +11,8 @@ export const reducer = (state={value: 0}, action) => {
     switch(action.type) {
         case 'increase':
             return {...state, value: state.value + (action.payload ?? 1)}
+        case 'decrease':
+            return {...state, value: state.value - (action.payload ?? 1)}
         default:
             return { ...state }
     }

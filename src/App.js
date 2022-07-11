@@ -3,7 +3,7 @@ import './App.css';
 import FormPage from './pages/FormPage'
 import ReduxPage from './pages/ReduxPage.js'
 import ReduxReactPage from './pages/ReduxReactPage.js'
-import { Provider } from 'react-redux'
+import { Provider } from './utils/react-redux'
 import { store } from './store'
 
 function App() {
