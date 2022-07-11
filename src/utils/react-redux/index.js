@@ -39,3 +39,14 @@ export const connect = (mapStateToProps, mapDispatchToProps) => (WrappedComponen
 
     )
 }
+
+export const useSelector = (selector) => {
+    const {getState, subscribe} = useContext(Context)
+    useSubscribeUpdate(subscribe)
+    return selector(getState())
+}
+
+export const useDispatch = () => {
+    const {dispatch} = useContext(Context)
+    return dispatch
+}
