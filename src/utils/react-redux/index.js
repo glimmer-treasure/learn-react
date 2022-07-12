@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect, useReducer } from 'react'
+import React, { useContext, useLayoutEffect, useReducer, useSyncExternalStore } from 'react'
 import { bindActionCreators } from '../Redux'
 
 const Context = React.createContext()
@@ -24,7 +24,8 @@ const useSubscribeUpdate = (subscribe) => {
 
 export const connect = (mapStateToProps, mapDispatchToProps) => (WrappedComponent) => (props) => {
     const { getState, subscribe, dispatch } = useContext(Context)
-    const stateProps = mapStateToProps(getState())
+    const state = useSyncExternalStore(subscribe, getState)
+    const stateProps = mapStateToProps(state)
     let dispatchProps = null
     if (typeof mapDispatchToProps === 'function') {
         dispatchProps = mapDispatchToProps(dispatch)
@@ -33,7 +34,6 @@ export const connect = (mapStateToProps, mapDispatchToProps) => (WrappedComponen
     } else {
         dispatchProps = { dispatch }
     }
-    useSubscribeUpdate(subscribe)
     return (
         <WrappedComponent {...stateProps} {...dispatchProps} {...props} dispatch={dispatch} />
 
@@ -42,8 +42,8 @@ export const connect = (mapStateToProps, mapDispatchToProps) => (WrappedComponen
 
 export const useSelector = (selector) => {
     const {getState, subscribe} = useContext(Context)
-    useSubscribeUpdate(subscribe)
-    return selector(getState())
+    const state = useSyncExternalStore(subscribe, getState)
+    return selector(state)
 }
 
 export const useDispatch = () => {
