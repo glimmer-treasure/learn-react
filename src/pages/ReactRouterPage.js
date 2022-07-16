@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import {BrowserRouter as Router, Routes, Route, Link, Outlet } from 'react-router-dom'
 
 
 const Home = (props) => {
@@ -17,12 +17,26 @@ const Product = (props) => {
     )
 }
 
+const Layout = (props) => {
+    return (
+        <div>
+            <h1>Layout</h1>
+            <Link to='/'>首页</Link>
+            <Link to='/product'>商品</Link>
+            <Outlet />
+        </div>
+    )
+}
+
 const ReactRouterPage = (props) => {
     return (
         <div className="react-router-page">
             <Router>
                 <Routes>
-                    <Route index element={Home}></Route>
+                    <Route path='/' element={<Layout />}>
+                        <Route index element={<Home />} />
+                        <Route path='product' element={<Product />} />
+                    </Route>
                 </Routes>
             </Router>
         </div>
