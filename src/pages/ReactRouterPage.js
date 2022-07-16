@@ -17,8 +17,7 @@ const Product = (props) => {
     )
 }
 
-
-export default ReactRouterPage = (props) => {
+const ReactRouterPage = (props) => {
     return (
         <div className="react-router-page">
             <Router>
@@ -29,3 +28,6 @@ export default ReactRouterPage = (props) => {
         </div>
     )
 }
+
+
+export default ReactRouterPage
