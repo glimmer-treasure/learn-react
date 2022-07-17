@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Routes, Route, Link, Outlet } from 'react-router-dom'
+import {BrowserRouter as Router, Routes, Route, Link, Outlet, useParams } from 'react-router-dom'
 
 
 const Home = (props) => {
@@ -9,13 +9,34 @@ const Home = (props) => {
     )
 }
 
+const ProductDetail = (props) => {
+    const params = useParams()
+    return (
+        <div>
+            <h1>Product Detail: {params.id}</h1>
+        </div>
+    )
+}
+
 const Product = (props) => {
     return (
         <div>
             <h1>Product</h1>
+            <Link to="/product/123">商品详情</Link>
+            <Outlet />
         </div>
     )
 }
+
+const NotFound = (props) => {
+    return (
+        <div>
+            <h1>Not Found</h1>
+        </div>
+    )
+}
+
+
 
 const Layout = (props) => {
     return (
@@ -35,7 +56,10 @@ const ReactRouterPage = (props) => {
                 <Routes>
                     <Route path='/' element={<Layout />}>
                         <Route index element={<Home />} />
-                        <Route path='product' element={<Product />} />
+                        <Route path='product' element={<Product />}>
+                            <Route path=':id' element={<ProductDetail/>} />    
+                        </Route>
+                        <Route path='*' element={<NotFound/>} />
                     </Route>
                 </Routes>
             </Router>
