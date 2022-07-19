@@ -1,28 +1,18 @@
 import React, { useEffect, useMemo } from "react"
 
 
-const createRoutesFormChildren = (children, parentPath = '/', routesMap = new Map()) => {
+const createRoutesFormChildren = (children) => {
+    let routes = []
     React.Children.forEach(children, (child) => {
-        const { props } = child
-        const { path = '', element, index } = props
-        let actualPath = ''
-        if (!index && !path) {
-            return
+        const { path, element, children} = child.props
+        let route = {
+            path,
+            component: element,
+            children: createRoutesFormChildren(children)
         }
-        if (index || path === '/') {
-            actualPath = '/'
-        } else if (path.startsWith('/')) {
-            actualPath = parentPath === '/' ? path : `${parentPath}${path}`
-        } else {
-            actualPath = parentPath === '/' ? `/${path}` : `${parentPath}/${path}`
-        }
-        routesMap.set(actualPath, {
-            path: actualPath,
-            component: element
-        })
-        createRoutesFormChildren(props.children, actualPath, routesMap)
+        routes.push(route)
     })
-    return routesMap
+    return routes
 }
 
 
@@ -33,10 +23,14 @@ export const BrowserRouter = (props) => {
 
 export const Routes = (props) => {
     const { children } = props
-    const routesMap = useMemo(() => createRoutesFormChildren(children), [children])
-    const path = window.location.pathname
-    const matchedRoute = routesMap.get(path)
+    const routes = createRoutesFormChildren(children)
+    const matchedRoute = useRoutes(routes)
     return matchedRoute?.component ?? null
+}
+
+const useRoutes = (routes) => {
+    const path = window.location.pathname
+    return routes.map((route) => path === route.path && route.component)
 }
 
 export const Route = (props) => {
